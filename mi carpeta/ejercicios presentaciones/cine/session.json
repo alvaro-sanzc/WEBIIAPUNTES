@@ -1,0 +1,10 @@
+{
+    "id": 1,
+    "pelicula_id": 1,
+    "sala": "Sala 5",
+    "fecha": "2025-03-04",
+    "hora": "20:00",
+    "formato": "IMAX 3D",
+    "precio": 12.50
+}
+  

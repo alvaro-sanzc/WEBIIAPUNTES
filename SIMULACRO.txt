@@ -1,0 +1,67 @@
+-------------------------------------------------------------------------
+2h PARTE PTRÁCTICA 6p
+
+-> PROBLEMA 1 4p
+
+APARTADO 1: en .env cambiar a /v2 y el puerto
+APARTADO 2: routes/book.js -> Ver el .yml bookmin es un objeto que devuelve una array
+
+
+book.js despues de .find poner .Project({title,author}
+Para hacer petición mongoDB
+
+APARTADO 3:
+NO CÓDIGO - MODIFICAR EL ARCHIVO OPENAPI 
+AÑADIR EL ATRIBUTO LINK EN CADA LIBRO CON LA URL COMPLETA DEL LIBRO
+
+APARTADO 4:
+EN BOOK.JS EN DELETE PONER LOS ERRORES QUE FALTAN SEGÚN EL OPENAPI EN ESTA RUTA - PONER ERROR 400
+
+-> PROBLEMA 2 EN MONDONGO 2p
+APARTADO 1: CORRECTA -> db.listingAndReviews.find({},{name:1,number_of_reviews:1}).sort({number_of_reviews}).limit(1)
+
+APARTADO 2: .aggrefate([{$proyect: {count: {$size:"$amerities"}}}]).sort({count:-1})
+---
+APARTADO 3
+
+
+----------------------------------------------
+1h - PARTE PRÁCTICA
+
+1- TODO MENOS FECHAS
+openapi
+fechsa le da igual
+graphql
+arquitectura
+soap
+los w
+
+2- PRÁCTICA, NO TEORÍA
+3- REST (ENTERO)
+ESTADO, HETOAS IMPORTANTE
+SERVICIOS RESTFUL
+Desde restful bla bla bla
+YAML
+4-
+OPENAPI - ventajas e inconvenientes
+webhooks
+Escalando API
+5- TODO HASTA 24 INCLUIDA MONGODB
+BSON
+6-XML - PUEDE CAER
+EJ BIEN FORMATEADO, CUANDO ES VÁLIDO
+DTD EJS IMPORTANTES, XPATH
+Ruta de xpath para conseguir ese elemento
+XPATH
+XSD
+XQUERY - POR ENCIMA
+
+7 - MICROSERVICIOS - ENTERO TEÓRICO ENTERO HASTA LA DE REFERENCIAS.
+
+
+ALGUNA PREGUNTA DE LOS TALLERES ENTRARÁ
+TALLERES - ANGULAR NADA, 
+AUTOMATIZACIÓN Y ESPECIALIZACIÓN - QOA,Dice que todo
+IaC - Ventajas Desventajas, CI/CD
+AWS - TODO
+

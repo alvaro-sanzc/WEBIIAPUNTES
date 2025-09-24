@@ -1,0 +1,289 @@
+OPENAPI YAMAL
+Diapositiva 37 - T2
+	"required": ["name", "artist", "dimension", "description", "tags"],
+
+  
+
+	"dimension": { "$ref": "#/$defs/dimension" },
+	"tags": {
+		"type": "array",
+		"items": { "$ref": "#/$defs/tag" }
+	}
+},
+"$defs": {
+"tag": {
+	"type": "string",
+	"enum": ["oil", "watercolor", "digital", "famous"]
+},
+"dimension": {
+	"type": "object",
+	"title": "Paintingdimension",
+	"description": "Describes thedimensionofa paintingin cm",
+	"required": ["width", "height"],
+	"properties": {
+		"width": { "type": "number", "description": "Widthoftheproduct", "minimum": 1 },
+		"height": { "type": "number", "description": "Heightoftheproduct", "minimum": 1 }
+}
+}
+
+
+
+
+
+
+MONGODB: 
+LOS EJS DE CLASE ESTÁN EN: https://github.com/carlosMoragon/Estudio-SW2/blob/main/Apuntes_profe/mongodb/ej_mongodb_sol.txt
+
+$gt (greater than) → mayor que
+$gte (greater than or equal) → mayor o igual que
+$lt (less than) → menor que
+$lte (less than or equal) → menor o igual que
+$eq (equal) → igual a
+$ne (not equal) → distinto de 
+$size -> tamaño
+
+
+Métodos:
+.count() 
+db.usuarios.find()
+find().sort(-1).limit(1) para ver el último.
+.sort() -> Ordenar los resultados de una consulta
+	db.usuarios.find().sort({ edad: 1 }) -> menor a mayor
+	db.usuarios.find().sort({ edad: -1 }) -> mayor a menor
+
+0. Limpiar la terminal -> cls
+1. Iniciar mongo -> mongosh
+2. Mostrar las BBDD -> show dbs
+3. Usar BBDD -> use choconautas
+4. Ver las colecciones -> show collections
+5. Ver la estructura de la tabla -> db.categorias.findOne()
+
+6. obtener el nombre(1 se obtiene, 0 no se obtiene) -> db.usuarios.findOne({}, { nombre: 1 })
+
+7. quitar el objectid de _id: 
+db.usuarios.aggregate([
+  { $project: { _id: { $toString: "$_id" }, nombre: 1, email: 1 } }
+])
+
+7.1 pero ordenado
+db.usuarios
+  .aggregate([{ $project: { _id: { $toString: "$_id" }, nombre: 1, email: 1 } }])
+  .map(u => ({ _id: u._id, nombre: u.nombre, email: u.email }));
+
+
+8. Quitar el ISODate de Fecha: 
+db.comentarios.aggregate([
+  {
+    $project: {
+      _id: 0,
+      contenido: 1,
+      fecha: { $dateToString: { format: "%Y-%m-%d %H:%M:%S", date: "$fecha" } },
+      autorId: { $toString: "$autorId" },
+      noticiaId: { $toString: "$noticiaId" }
+    }
+  }
+])
+
+8.1 Dividir la fecha en Fecha y hora
+db.comentarios.aggregate([
+  {
+    $project: {
+      _id: 0,
+      contenido: 1,
+      fecha: { $dateToString: { format: "%Y-%m-%d", date: "$fecha" } },   // solo la fecha
+      hora: { $dateToString: { format: "%H:%M:%S", date: "$fecha" } },    // solo la hora
+      autorId: { $toString: "$autorId" },
+      noticiaId: { $toString: "$noticiaId" }
+    }
+  }
+])
+
+
+9. acceder a  intereses: ["fútbol", "ciencia ficción"],
+9.1 todos los intereses
+db.usuarios.findOne({}, { intereses: 1, _id: 0 })
+
+9.2. Solo fútbol
+db.usuarios.aggregate([
+  { $project: { primerInteres: { $arrayElemAt: ["$intereses", 0] } } }
+])
+
+
+TODOS LOS USUARIOS CON INTERES EN FÚTBOL
+db.usuarios.find({ "intereses": "fútbol" })
+
+
+9.3 con aggregate 
+db.usuarios.aggregate([
+  { $project: {
+      _id: 0,
+      intereses: {
+        $filter: {
+          input: "$intereses",
+          as: "interes",
+          cond: { $eq: ["$$interes", "fútbol"] }
+        }
+      }
+  }}
+])
+
+
+10. ACCESO
+
+"direccion": {
+    "ciudad": "Madrid",
+    "codigoPostal": { "$numberInt": "28001" }
+  },
+
+10.1. MADRID
+db.usuarios.findOne({}, { "direccion.ciudad": 1, _id: 0 })
+
+db.usuarios.aggregate([
+  { $project: { _id: 0, ciudad: "$direccion.ciudad" } }
+])
+
+
+todos los usuarios de Madrid
+db.usuarios.find({ "direccion.ciudad": "Madrid" })
+
+10.2 Acceso a codigoPostal
+db.usuarios.findOne({}, { "direccion.codigoPostal": 1, _id: 0 })
+db.usuarios.aggregate([
+  { $project: { _id: 0, codigoPostal: "$direccion.codigoPostal" } }
+])
+
+
+11. ACCESO AL id  
+"_id": { "$oid": "683050b61388ec33708f94f6" },
+"fechaRegistro": { "$date": "2025-02-21T12:40:54.456Z" },
+
+db.usuarios.aggregate([
+  {
+    $project: {
+      _id: { $toString: "$_id" },
+      fechaRegistro: { $dateToString: { date: "$fechaRegistro", format: "%Y-%m-%d %H:%M:%S" } }
+    }
+  }
+])
+
+12. 
+ "proyectos": [
+    {
+      "nombre": "ChocoApp",
+      "estado": "activo",
+      "fechaInicio": { "$date": "2024-05-15T10:00:00Z" }
+    },
+    {
+      "nombre": "Nave Espacial",
+      "estado": "en pausa",
+      "fechaInicio": { "$date": "2023-11-01T09:30:00Z" }
+    }
+  ],
+
+12.1 
+db.usuarios.aggregate([
+  { $unwind: "$proyectos" },
+  { $project: { _id: 0, nombreUsuario: "$nombre", proyecto: "$proyectos.nombre", estado: "$proyectos.estado" } }
+])
+
+12.2 CON FECHA INICIO
+db.usuarios.aggregate([
+  { $unwind: "$proyectos" },
+  {
+    $project: {
+      _id: 0,
+      usuario: "$nombre",
+      proyecto: "$proyectos.nombre",
+      estado: "$proyectos.estado",
+      fechaInicio: {
+        $dateToString: { format: "%Y-%m-%d", date: "$proyectos.fechaInicio" }
+      }
+    }
+  }
+])
+
+
+13. ENTRE 
+13.1. En sample_training.trips ¿Cuál es la diferencia entre la gente que nació en 1998 y la que nació después de 1998? (sol. 6)
+Math.abs(db.trips.find({"birth year": 1998}).count()-db.trips.find({"birth year": {$gt:1998}}).count())
+
+
+db.usuarios.aggregate([
+  {
+    $facet: {
+      en1998: [
+        { $match: { nacimiento: 1998 } },
+        { $count: "total" }
+      ],
+      despues1998: [
+        { $match: { nacimiento: { $gt: 1998 } } },
+        { $count: "total" }
+      ]
+    }
+  },
+  {
+    $project: {
+      en1998: { $ifNull: [ { $arrayElemAt: ["$en1998.total", 0] }, 0 ] },
+      despues1998: { $ifNull: [ { $arrayElemAt: ["$despues1998.total", 0] }, 0 ] }
+    }
+  }
+])
+
+13.2 ENTRE 1990 Y 2020
+db.usuarios.find({
+  nacimiento: { $gte: 1990, $lte: 2020 }
+})
+
+db.usuarios.find({
+  fechaNacimiento: {
+    $gte: ISODate("1990-01-01"),
+    $lte: ISODate("2020-12-31")
+  }
+})
+
+fecha: ISODate('2025-02-21T12:40:54.456Z')
+db.usuarios.find({
+  fecha: {
+    $gte: ISODate("1990-01-01T00:00:00Z"),
+    $lte: ISODate("2020-12-31T23:59:59Z")
+  }
+})
+
+14. El más joven 
+3. En sample_training.trips, ¿en qué año nació el ciclista más joven? (sol. 1999)
+db.trips.find({"birth year":{$ne:""}},{"birth year":1,_id:0}).sort({"birth year":-1}).limit(1)
+
+14.1 MÁS JOVEN+
+db.sample_training.trips.aggregate([
+  {
+    $group: {
+      _id: null,
+      anioMasJoven: { $max: "$birth year" }
+    }
+  }
+])
+
+db.sample_training.trips.find(
+  { "birth year": { $type: "int" } },        // aseguras que sea numérico
+  { "birth year": 1, _id: 0 }
+).sort({ "birth year": -1 }).limit(1)
+
+14.2 MÁS VIEJO
+db.sample_training.trips.aggregate([
+  {
+    $group: {
+      _id: null,
+      anioMasViejo: { $min: "$birth year" }
+    }
+  }
+])
+
+db.sample_training.trips.find(
+  { "birth year": { $type: "int" } },    // asegurar que sean numéricos
+  { "birth year": 1, _id: 0 }
+).sort({ "birth year": 1 }).limit(1)
+
+
+
+
+

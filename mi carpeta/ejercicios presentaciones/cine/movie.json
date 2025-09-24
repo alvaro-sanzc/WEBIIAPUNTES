@@ -1,0 +1,10 @@
+{
+    "id": 1,
+    "titulo": "Dune: Part Two",
+    "duracion": 165,
+    "genero": ["Ciencia Ficción", "Aventura"],
+    "clasificacion": "PG-13",
+    "sinopsis": "Paul Atreides une fuerzas con los Fremen para enfrentarse al Imperio.",
+    "director": "Denis Villeneuve",
+    "actores": ["Timothée Chalamet", "Zendaya", "Rebecca Ferguson"]
+}

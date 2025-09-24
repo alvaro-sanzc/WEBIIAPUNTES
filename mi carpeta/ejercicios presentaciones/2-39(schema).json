@@ -1,0 +1,34 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema#",
+    "$id": "http://example.com/schemas/painting.schema.json",
+    "type": "object",
+    "title": "Series Basic Information",
+    "required": ["title", "year", "genre", "seasons", "rating"],
+    "properties": {
+      "title": {
+        "type": "string",
+        "description": "Title of series"
+     },
+      "year": { 
+        "type": "integer",
+        "minimum": 1900,
+        "description": "The realease year of the series"
+     },
+      "genre": { 
+        "type": "array", 
+        "items": { "type": "string" },
+        "description": "Genres the series belongs to" 
+      },
+      "seasons": { 
+        "type": "integer", 
+        "minimum": 1,
+        "description": "Number of seasons the series has"
+     },
+      "rating": { 
+        "type": "number", 
+        "minimum": 0, 
+        "maximum": 10,
+        "description": "Rating of the show"
+     }
+    }
+  }

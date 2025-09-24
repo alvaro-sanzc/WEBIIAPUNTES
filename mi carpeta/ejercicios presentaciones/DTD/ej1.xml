@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE TVSCHEDULE [
+<!ELEMENT TVSCHEDULE (CHANNEL+)>
+<!ELEMENT CHANNEL (BANNER,DAY+)>
+<!ELEMENT BANNER (#PCDATA)>
+<!ELEMENT DAY (DATE,(HOLIDAY|PROGRAMSLOT+)+)>
+<!ELEMENT HOLIDAY (#PCDATA)>
+<!ELEMENT DATE (#PCDATA)>
+<!ELEMENT PROGRAMSLOT (TIME,TITLE,DESCRIPTION?)>
+<!ELEMENT TIME (#PCDATA)>
+<!ELEMENT TITLE (#PCDATA)>
+<!ELEMENT DESCRIPTION (#PCDATA)>
+<!ATTLIST TVSCHEDULE NAME CDATA #REQUIRED>
+<!ATTLIST CHANNEL CHAN CDATA #REQUIRED>
+<!ATTLIST PROGRAMSLOT VTR CDATA #IMPLIED>
+<!ATTLIST TITLE RATING CDATA #IMPLIED>
+<!ATTLIST TITLE LANGUAGE CDATA #IMPLIED>
+]>
+
+<TVSCHEDULE NAME="Spring Schedule 2025">
+  <CHANNEL CHAN="101">
+    <BANNER>Entertainment Channel</BANNER>
+    <DAY>
+      <DATE>2025-04-29</DATE>
+      <PROGRAMSLOT VTR="Yes">
+        <TIME>08:00</TIME>
+        <TITLE RATING="PG" LANGUAGE="English">Morning News</TITLE>
+        <DESCRIPTION>Daily morning news with weather updates.</DESCRIPTION>
+      </PROGRAMSLOT>
+      <PROGRAMSLOT>
+        <TIME>09:00</TIME>
+        <TITLE RATING="G" LANGUAGE="English">Cartoon Hour</TITLE>
+      </PROGRAMSLOT>
+    </DAY>
+    <DAY>
+      <DATE>2025-05-01</DATE>
+      <HOLIDAY>Labor Day - Special Programming</HOLIDAY>
+      <PROGRAMSLOT>
+        <TIME>10:00</TIME>
+        <TITLE RATING="PG" LANGUAGE="Spanish">Película Especial</TITLE>
+        <DESCRIPTION>Una película para toda la familia.</DESCRIPTION>
+      </PROGRAMSLOT>
+    </DAY>
+  </CHANNEL>
+  <CHANNEL CHAN="102">
+    <BANNER>Sports Channel</BANNER>
+    <DAY>
+      <DATE>2025-04-29</DATE>
+      <PROGRAMSLOT>
+        <TIME>12:00</TIME>
+        <TITLE RATING="PG" LANGUAGE="English">Live Football</TITLE>
+        <DESCRIPTION>Championship League - Quarter Finals</DESCRIPTION>
+      </PROGRAMSLOT>
+    </DAY>
+  </CHANNEL>
+</TVSCHEDULE>

@@ -1,0 +1,15 @@
+{
+    "top_peliculas": [
+      {
+        "pelicula_id": 1,
+        "titulo": "Dune: Part Two ",
+        "asistentes": 5000
+      },
+      {
+        "pelicula_id": 2,
+        "titulo": "Oppenheimer",
+        "asistentes": 4500
+      }
+    ]
+}
+  

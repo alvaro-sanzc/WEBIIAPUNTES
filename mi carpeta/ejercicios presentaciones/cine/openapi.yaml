@@ -1,0 +1,452 @@
+openapi: 3.0.0
+info:
+  title: Cine API
+  description: API para gestionar películas, sesiones, reservas, estadísticas y usuarios de un cine.
+  version: 1.0.0
+
+servers:
+  - url: https://api.cine.com/v1
+    description: API principal del cine
+
+paths:
+  /movies:
+    get:
+      summary: Ver todas las películas
+      responses:
+        '200':
+          description: Lista de todas las películas
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    title:
+                      type: string
+                    director:
+                      type: string
+                    genre:
+                      type: string
+                    release_date:
+                      type: string
+                      format: date
+    post:
+      summary: Añadir una nueva película
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                director:
+                  type: string
+                genre:
+                  type: string
+                release_date:
+                  type: string
+                  format: date
+      responses:
+        '201':
+          description: Película creada
+  /movies/{id}:
+    get:
+      summary: Ver los detalles de una película
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID de la película
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Detalles de la película
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  title:
+                    type: string
+                  director:
+                    type: string
+                  genre:
+                    type: string
+                  release_date:
+                    type: string
+                    format: date
+        '404':
+          description: Película no encontrada
+    put:
+      summary: Actualizar información de una película
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID de la película
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                director:
+                  type: string
+                genre:
+                  type: string
+                release_date:
+                  type: string
+                  format: date
+      responses:
+        '200':
+          description: Película actualizada
+        '400':
+          description: Petición incorrecta
+    delete:
+      summary: Eliminar una película
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID de la película
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Película eliminada
+
+  /sessions:
+    get:
+      summary: Ver todas las sesiones
+      responses:
+        '200':
+          description: Lista de sesiones
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    movie_id:
+                      type: integer
+                    start_time:
+                      type: string
+                      format: date-time
+    /sessions/{id}:
+      get:
+        summary: Ver detalles de una sesión
+        parameters:
+          - name: id
+            in: path
+            required: true
+            description: ID de la sesión
+            schema:
+              type: integer
+        responses:
+          '200':
+            description: Detalles de la sesión
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    movie_id:
+                      type: integer
+                    start_time:
+                      type: string
+                      format: date-time
+          '404':
+            description: Sesión no encontrada
+
+  /bookings:
+    get:
+      summary: Ver todas las reservas
+      responses:
+        '200':
+          description: Lista de todas las reservas
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    session_id:
+                      type: integer
+                    user_id:
+                      type: integer
+    post:
+      summary: Crear una nueva reserva
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                session_id:
+                  type: integer
+                user_id:
+                  type: integer
+      responses:
+        '201':
+          description: Reserva creada
+    /bookings/{id}:
+      get:
+        summary: Ver reservas de una película
+        parameters:
+          - name: id
+            in: path
+            required: true
+            description: ID de la reserva
+            schema:
+              type: integer
+        responses:
+          '200':
+            description: Información de la reserva
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    session_id:
+                      type: integer
+                    user_id:
+                      type: integer
+      delete:
+        summary: Cancelar una reserva
+        parameters:
+          - name: id
+            in: path
+            required: true
+            description: ID de la reserva
+            schema:
+              type: integer
+        responses:
+          '204':
+            description: Reserva cancelada
+
+  /stats/movies:
+    get:
+      summary: Película más vistas
+      responses:
+        '200':
+          description: Película más vista
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  movie_id:
+                    type: integer
+                  title:
+                    type: string
+                  views:
+                    type: integer
+
+  /stats/sales:
+    get:
+      summary: Recaudación total
+      responses:
+        '200':
+          description: Total de ventas
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  total_sales:
+                    type: number
+                    format: float
+
+  /recommendations:
+    get:
+      summary: Recomendaciones para el usuario
+      parameters:
+        - name: usuario
+          in: query
+          required: true
+          description: Correo electrónico del usuario
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Lista de recomendaciones para el usuario
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    movie_id:
+                      type: integer
+                    title:
+                      type: string
+        '404':
+          description: Usuario no encontrado
+
+  /user:
+    post:
+      summary: Registrar un usuario
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+      responses:
+        '201':
+          description: Usuario creado
+        '400':
+          description: Petición incorrecta
+
+  /user/{id}:
+    get:
+      summary: Ver la información de un usuario
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID del usuario
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Información del usuario
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  email:
+                    type: string
+                  name:
+                    type: string
+    put:
+      summary: Actualizar los datos del usuario
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID del usuario
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                name:
+                  type: string
+      responses:
+        '200':
+          description: Usuario actualizado
+        '404':
+          description: Usuario no encontrado
+    delete:
+      summary: Eliminar la cuenta de un usuario
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID del usuario
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Usuario eliminado
+
+  /user/vip/{id}:
+    get:
+      summary: Ver el estado VIP de un usuario
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID del usuario
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Estado VIP del usuario
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  status:
+                    type: string
+                  benefits:
+                    type: array
+                    items:
+                      type: string
+        '404':
+          description: Usuario no encontrado
+
+  /user/vip:
+    post:
+      summary: Convertirse en usuario VIP
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user_id:
+                  type: integer
+      responses:
+        '200':
+          description: Usuario ahora es VIP
+        '404':
+          description: Usuario no encontrado
+
+  /user/vip/{id}:
+    delete:
+      summary: Cancelar el estado VIP de un usuario
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID del usuario VIP
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Estado VIP cancelado

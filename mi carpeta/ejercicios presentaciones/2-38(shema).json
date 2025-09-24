@@ -1,0 +1,62 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema#",
+    "$id": "http://example.com/schemas/superhero.schema.json",
+    "type": "object",
+    "title": "Superhero Squad",
+    "description": "Information for a superhero squad",
+    "required": ["squadName", "homeTown", "formed", "secretBase", "active", "members"],
+    "properties": {
+      "squadName": {
+        "type": "string",
+        "description": "Superhero squad name"
+      },
+      "homeTown": {
+        "type": "string",
+        "description": "Hometown name of the squad"
+      },
+      "formed": {
+        "type": "integer",
+        "description": "Year the squad was formed",
+        "minimum": 1900
+      },
+      "secretBase": {
+        "type": "string",
+        "description": "Secret base of the squad"
+      },
+      "active": {
+        "type": "boolean",
+        "description": "Indicates whether the squad is currently active"
+      },
+      "members": {
+        "type": "array",
+        "description": "List of squad members",
+        "items": {
+          "type": "object",
+          "required": ["name", "age", "secretIdentity", "powers"],
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "Name of the superhero"
+            },
+            "age": {
+              "type": "integer",
+              "description": "Age of the superhero",
+              "minimum": 0
+            },
+            "secretIdentity": {
+              "type": "string",
+              "description": "Secret identity of the superhero"
+            },
+            "powers": {
+              "type": "array",
+              "description": "List of powers",
+              "items": {
+                "type": "string"
+              },
+              "minItems": 1
+            }
+          }
+        }
+      }
+    }
+  }
