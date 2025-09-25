@@ -3,7 +3,11 @@
 
 -> PROBLEMA 1 4p
 
-APARTADO 1: en .env cambiar a /v2 y el puerto
+APARTADO 1: en .env cambiar a /v2 y el puerto 
+VER EN OPEN API 
+servers:
+  - url: localhost:3010/api/v2
+
 APARTADO 2: routes/book.js -> Ver el .yml bookmin es un objeto que devuelve una array
 
 
